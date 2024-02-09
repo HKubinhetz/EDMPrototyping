@@ -19,51 +19,25 @@ def setup_selenium():
 
 
 def close_selenium(driver):
+    # Quits webdriver
     driver.quit()
 
 
 def fetch_website(driver, desired_website):
-
-    # Fetching a website
+    # Fetches a website
     driver.get(desired_website)
 
 
 def getlink(driver, linktext: str):
-
-    # Clicking on a link
+    # Clicks on a link
     exercise_link = driver.find_element(By.LINK_TEXT, linktext)
     exercise_link.click()
     time.sleep(1)
 
 
-def selenium1create(driver, quantity: int):
-    # Creating buttons (0.1 sec delay on each to facilitate progress).
-    create_button = driver.find_element(By.XPATH, "//button[contains(text(),'Add Element')]")
-
-    for i in range(0, quantity):
-        create_button.click()
-        time.sleep(0.1)
-
-
-def selenium1delete(driver):
-
-    # Finding all created buttons:
-    # Deleting one button;
-    all_created_buttons = driver.find_elements(By.CLASS_NAME, "added-manually")
-
-    # Iterating through created buttons
-
-    for btn in all_created_buttons:
-        btn_index = all_created_buttons.index(btn)
-
-        if btn_index % 2 == 0:
-            btn.click()
-            # print("Deleted Button number " + str(btn_index) + "!") # Some fun checking
-            time.sleep(0.1)
-
-
 def fetch_variables():
-
+    # This function fetches all needed variables from config file;
+    # If file doesn't exist, it prompts the user to fill needed info.
     filecheck = os.path.isfile("config/data.json")
 
     if not filecheck:
