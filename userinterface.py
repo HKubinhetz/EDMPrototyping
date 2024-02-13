@@ -1,31 +1,40 @@
 import PySimpleGUI as sg
 
-# Creating the Layout Object
-layout = [[sg.Text("Olá!! Por favor cadastre-se")],
-          [sg.Text("Insira o e-mail de login"), sg.Input()],
-          [sg.Text("Insira a senha:"), sg.Input(key='Password', password_char="*")],
-          [sg.Text("Insira o link do site:"), sg.Input()],
-          [sg.Button("OK"), sg.Button("Cancelar")]]
+# Defining the Theme
+sg.theme('SystemDefault')
 
-# Main window configuration!
-window = sg.Window("Demo", layout)
+# Creating the Form Layout Object
+# TODO - If this is not the first time form_layout runs, use previous keys as values.
 
-# Create an event loop
-while True:
-    event, values = window.read()
-    # End program if user closes window or
-    # presses the OK button
-    if event == "OK" or event == sg.WIN_CLOSED:
-        break
-
-window.close()
+form_layout = [[sg.VPush()],
+               [sg.Text("Olá!! Por favor cadastre-se:", pad=(0, 20))],
+               [sg.Text("Insira o e-mail de login"), sg.Push(), sg.Input(key='login', size=(50, 1))],
+               [sg.Text("Insira a senha:"), sg.Push(), sg.Input(key='password', password_char="*", size=(50, 1))],
+               [sg.Text("Insira o link do site:"), sg.Push(), sg.Input(key='site', size=(50, 1))],
+               [sg.Push(), sg.Button("OK", size=(20, 100), pad=(0, 20)), sg.Push()],
+               [sg.VPush()]]
 
 
-"""
-print("Arquivo não encontrado! Favor recadastre-se.")
-login = input("Insira o e-mail de login: ")
-password = input("Insira a senha: ")
-website1 = input("Insira o site-base: ")
-website2 = input("Insira o site-suporte (página de abrir processos): ")
-data = {'login': login, 'senha': password, 'site1': website1, 'site2': website2}
-"""
+def run_form():
+    # Creating an empty dictionary
+    data = {}
+
+    # Main window configuration!
+    form_window = sg.Window("Cadastro", form_layout, size=(600, 220))
+
+    # Create an event loop
+    while True:
+        event, values = form_window.read()
+        # End program if user closes window or
+        # presses the OK button
+        if event == "OK" or event == sg.WIN_CLOSED:
+            data["login"] = values["login"]
+            data["senha"] = values["password"]
+            data["site1"] = values["site"]
+            data["site2"] = values["site"] + "/processos/"
+            form_window.close()
+
+            # TODO - If any key is empty, show a warning and ask for input again
+
+            return data
+

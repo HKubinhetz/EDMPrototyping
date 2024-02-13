@@ -2,6 +2,7 @@
 import time
 import json
 import os.path
+import userinterface
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
@@ -41,12 +42,21 @@ def fetch_variables():
     filecheck = os.path.isfile("config/data.json")
 
     if not filecheck:
+
+        """ 
+        
+        >>> Original process:
+        
         print("Arquivo não encontrado! Favor recadastre-se.")
         login = input("Insira o e-mail de login: ")
         password = input("Insira a senha: ")
         website1 = input("Insira o site-base: ")
         website2 = input("Insira o site-suporte (página de abrir processos): ")
         data = {'login': login, 'senha': password, 'site1': website1, 'site2': website2}
+        
+        """
+
+        data = userinterface.run_form()
 
         with open('config/data.json', 'w') as f:
             json.dump(data, f)
