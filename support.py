@@ -36,10 +36,10 @@ def getlink(driver, linktext: str):
     time.sleep(1)
 
 
-def fetch_variables():
+def fetch_variables(path):
     # This function fetches all needed variables from config file;
     # If file doesn't exist, it prompts the user to fill needed info.
-    filecheck = os.path.isfile("config/data.json")
+    filecheck = os.path.isfile(path + "/config/data.json")
 
     if not filecheck:
 
@@ -58,14 +58,14 @@ def fetch_variables():
 
         data = userinterface.run_form()
 
-        with open('config/data.json', 'w') as f:
+        with open(path + "/config/data.json", 'w') as f:
             json.dump(data, f)
 
-    with open("config/data.json", 'r+') as jsonfile:
+    with open(path + "/config/data.json", 'r+') as jsonfile:
         json_contents = jsonfile.read()
 
     json_data = json.loads(json_contents)
-    return json_data['login'], json_data['senha'], json_data['site1'], json_data['site2']
+    return json_data  # ['login'], json_data['senha'], json_data['site1'], json_data['site2']
 
 
 

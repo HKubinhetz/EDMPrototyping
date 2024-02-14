@@ -31,7 +31,7 @@ def run_form():
             data["login"] = values["login"]
             data["senha"] = values["password"]
             data["site1"] = values["site"]
-            data["site2"] = values["site"] + "/processos/"
+            data["site2"] = values["site"] + "bpm/lista_modelos"
             form_window.close()
 
             # TODO - If any key is empty, show a warning and ask for input again

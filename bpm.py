@@ -1,4 +1,5 @@
 # ------------------------------------------------ IMPORTS ------------------------------------------------
+import os
 import time
 import json
 import support as sp
@@ -8,12 +9,18 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.action_chains import ActionChains
 
+# ------------------------------------------------- PATH ---------------------------------------------------
+
+mypath = os.path.dirname(__file__)
 
 # ------------------------------------------------ VARIABLES ------------------------------------------------
-email = sp.fetch_variables()[0]
-password = sp.fetch_variables()[1]
-website = sp.fetch_variables()[2]
-website2 = sp.fetch_variables()[3]
+
+variables = sp.fetch_variables(mypath)
+email = variables["login"]
+password = variables["senha"]
+website = variables["site1"]
+website2 = variables["site2"]
+
 
 # ---------------------------------------------- AUX FUNCTIONS ----------------------------------------------
 
@@ -26,7 +33,7 @@ def button_advance(driver):
 
 def load_cookies():
     # Load cookies to a variable from a file
-    with open('config/cookies.json', 'r') as file:
+    with open(mypath + "/config/cookies.json", 'r') as file:
         cookies = json.load(file)
 
     # Navigating to correct link
@@ -100,11 +107,19 @@ def login_user():
     # Get and store cookies after login
     cookies = chrome_driver.get_cookies()
 
+    # TODO - Transfer pathing to 'support' script
     # Store cookies in a file
-    with open('config/cookies.json', 'w') as file:
+    with open(mypath + "/config/cookies.json", 'w') as file:
         json.dump(cookies, file)
 
+
 # --------------------------------------------- PART 2 - TICKET ----------------------------------------------
+
+# Fetching Variables
+
+client_code = "000000"
+client_name = "CLIENTE TESTE"
+client_reason = "Troca PTZ"
 
 
 # Also waits for page to finish loading
@@ -114,7 +129,7 @@ def build_bpm_ticket(chrome_driver):
         until(ec.presence_of_element_located((By.XPATH, "//*[@id='COD_INSTALACAO']")))
     time.sleep(4)
     cdie_field.click()
-    cdie_field.send_keys("000000")
+    cdie_field.send_keys(client_code)
     cdie_field.send_keys(Keys.TAB)
 
     # ---------------------------------- JavaScript Alert ----------------------------------
@@ -135,8 +150,8 @@ def build_bpm_ticket(chrome_driver):
     area_search.send_keys(Keys.ESCAPE)
 
     # ---------------------------------- Third Field - Client Name ----------------------------------
-    client_name = chrome_driver.find_element(By.ID, "CLIENTE")
-    client_name.send_keys("CLIENTE TESTE")
+    form_name = chrome_driver.find_element(By.ID, "CLIENTE")
+    form_name.send_keys(client_name)
 
     # ---------------------------------- Fourth Field - Region ----------------------------------
 
@@ -192,7 +207,8 @@ def build_bpm_ticket(chrome_driver):
     # ---------------------------------- Text Field - Full description ----------------------------------
     description_field = WebDriverWait(chrome_driver, 10).until(ec.presence_of_element_located((By.ID, "DESCRICAO")))
     description_field.click()
-    description_field.send_keys("Prezados, bom dia! Poderiam por gentileza estimar o cliente XXX - YYY? Motivo: ZZZ. "
+    description_field.send_keys(f"Prezados! Poderiam por gentileza estimar o cliente {client_code} - {client_name}? \n"
+                                f"Motivo: {client_reason}. \n \n"
                                 "Obrigado e um ótimo dia!")
 
     # ---------------------------------- FINAL DATA ACQUISITION ----------------------------------
