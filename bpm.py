@@ -15,13 +15,14 @@ mypath = os.path.dirname(__file__)
 
 # ------------------------------------------------ VARIABLES ------------------------------------------------
 
-variables = sp.fetch_variables(mypath)
-email = variables["login"]
-password = variables["senha"]
+login_variables = sp.fetch_login(mypath)
+email = login_variables["login"]
+password = login_variables["senha"]
 
-# Todo - Remove the need for filling in the webssite
-website = variables["site1"]
-website2 = variables["site2"]
+# COMPLETE - Remove the need for filling in the webssite
+site_variables = sp.get_website_info(mypath, "BPM")
+website = site_variables["site1"]
+website2 = site_variables["site2"]
 
 
 # ---------------------------------------------- AUX FUNCTIONS ----------------------------------------------
@@ -71,48 +72,53 @@ def open_bpm_ticket(chrome_driver):
 # --------------------------------------------- PART 1 - LOGIN ----------------------------------------------
 
 def login_user():
-    # Navigating to correct link
-    chrome_driver = sp.setup_selenium()
-    sp.fetch_website(chrome_driver, website)
 
-    # Login Button
-    login_button = WebDriverWait(chrome_driver, 10).\
-        until(ec.visibility_of_element_located((By.XPATH, "//*[@id='root']/div/div[1]/div[1]/div[3]/div/span")))
-    login_button.click()
+    valid_cookies = sp.validate_cookies(mypath)
 
-    # Login Field
-    login_field = WebDriverWait(chrome_driver, 10).\
-        until(ec.visibility_of_element_located((By.ID, "i0116")))
-    login_field.send_keys(email)
+    if not valid_cookies:
 
-    # Login Advance
-    button_advance(chrome_driver)
+        # Navigating to correct link
+        chrome_driver = sp.setup_selenium()
+        sp.fetch_website(chrome_driver, website)
 
-    # Password Field
-    password_field = WebDriverWait(chrome_driver, 10).\
-        until(ec.visibility_of_element_located((By.ID, "i0118")))
+        # Login Button
+        login_button = WebDriverWait(chrome_driver, 10).\
+            until(ec.visibility_of_element_located((By.XPATH, "//*[@id='root']/div/div[1]/div[1]/div[3]/div/span")))
+        login_button.click()
 
-    password_field.send_keys(password)
+        # Login Field
+        login_field = WebDriverWait(chrome_driver, 10).\
+            until(ec.visibility_of_element_located((By.ID, "i0116")))
+        login_field.send_keys(email)
 
-    # Login Advance - Part 2
-    button_advance(chrome_driver)
+        # Login Advance
+        button_advance(chrome_driver)
 
-    # Keep Logged In
-    # Login Advance - Part 2
-    button_advance(chrome_driver)
+        # Password Field
+        password_field = WebDriverWait(chrome_driver, 10).\
+            until(ec.visibility_of_element_located((By.ID, "i0118")))
 
-    # Check Logged In status
-    logged_in = WebDriverWait(chrome_driver, 120).\
-        until(ec.visibility_of_element_located((By.ID, "topo")))
-    print("Logado!")
+        password_field.send_keys(password)
 
-    # Get and store cookies after login
-    cookies = chrome_driver.get_cookies()
+        # Login Advance - Part 2
+        button_advance(chrome_driver)
 
-    # TODO - Transfer pathing to 'support' script
-    # Store cookies in a file
-    with open(mypath + "/config/cookies.json", 'w') as file:
-        json.dump(cookies, file)
+        # Keep Logged In
+        # Login Advance - Part 2
+        button_advance(chrome_driver)
+
+        # Check Logged In status
+        logged_in = WebDriverWait(chrome_driver, 120).\
+            until(ec.visibility_of_element_located((By.ID, "topo")))
+        print("Logado!")
+
+        # Get and store cookies after login
+        cookies = chrome_driver.get_cookies()
+
+        # TODO - Transfer pathing to 'support' script on a "save cookies" function
+        # Store cookies in a file
+        with open(mypath + "/config/cookies.json", 'w') as file:
+            json.dump(cookies, file)
 
 
 # --------------------------------------------- PART 2 - TICKET ----------------------------------------------

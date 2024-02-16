@@ -10,7 +10,6 @@ form_layout = [[sg.VPush()],
                [sg.Text("Olá!! Por favor cadastre-se:", pad=(0, 20))],
                [sg.Text("Insira o e-mail de login"), sg.Push(), sg.Input(key='login', size=(50, 1))],
                [sg.Text("Insira a senha:"), sg.Push(), sg.Input(key='password', password_char="*", size=(50, 1))],
-               [sg.Text("Insira o link do site:"), sg.Push(), sg.Input(key='site', size=(50, 1))],
                [sg.Push(), sg.Button("OK", size=(20, 100), pad=(0, 20)), sg.Push()],
                [sg.VPush()]]
 
@@ -30,8 +29,6 @@ def run_form():
         if event == "OK" or event == sg.WIN_CLOSED:
             data["login"] = values["login"]
             data["senha"] = values["password"]
-            data["site1"] = values["site"]
-            data["site2"] = values["site"] + "bpm/lista_modelos"
             form_window.close()
 
             # TODO - If any key is empty, show a warning and ask for input again

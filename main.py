@@ -6,16 +6,17 @@
 # COMPLETE - Step 3a) Run the automation from Excel
 # COMPLETE - Step 3b) Run the automation WITH parameters
 # Step 4) Record the automation into workbook
-# Step 5) Optimize VBA to find the correct columns and start from the selected cell
-# Step 6) Tests and error handling
+# COMPLETE - Step 5) Optimize VBA to find the correct columns and start from the selected cell
+# Step 6) - VBA Prompt user about data.
 # Step 7) Production
 
 
 # ------------------------------------------------- EXTRAS --------------------------------------------------
 # Extra 1 - Documentation on support.py
 # COMPLETE - Extra 2 - Create a UI for new config files
-# Extra 3 - Check if cookies are recent and, if so simply load them.
+# COMPLETE - Extra 3 - Check if cookies are recent and, if so, simply load them.
 # Extra 4 - Implement for several selected clients
+# Extra 5 - Error Handling for unexpected conditions (cancellations/timeout >>> always delete time json for safety)
 
 # ------------------------------------------------- IMPORTS -------------------------------------------------
 
@@ -29,15 +30,7 @@ import bpm
 # --------------------------------------------- PART 1 - LOGIN ----------------------------------------------
 
 def main(cdie="no_cdie", name="no_name", reason="no_reason"):
-    print("running")
-    print(cdie)
 
-    with open("C:\\Users\\ricku\\Desktop\\batata.txt", 'w') as f:
-        f.write(cdie)
-        f.write(name)
-        f.write(reason)
-
-    # TODO - Defining when code ran for the last time to skip login if cookies are still valid.
     bpm.login_user()
     driver = bpm.load_cookies()
     bpm.open_bpm_ticket(driver)
@@ -45,5 +38,5 @@ def main(cdie="no_cdie", name="no_name", reason="no_reason"):
 
 
 if __name__ == "__main__":
-    main() #
+    main()
 
