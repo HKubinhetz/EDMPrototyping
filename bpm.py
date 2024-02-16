@@ -18,6 +18,8 @@ mypath = os.path.dirname(__file__)
 variables = sp.fetch_variables(mypath)
 email = variables["login"]
 password = variables["senha"]
+
+# Todo - Remove the need for filling in the webssite
 website = variables["site1"]
 website2 = variables["site2"]
 
@@ -115,16 +117,15 @@ def login_user():
 
 # --------------------------------------------- PART 2 - TICKET ----------------------------------------------
 
-# Fetching Variables
-
-client_code = "000000"
-client_name = "CLIENTE TESTE"
-client_reason = "Troca PTZ"
-
-
 # Also waits for page to finish loading
 
-def build_bpm_ticket(chrome_driver):
+def build_bpm_ticket(chrome_driver, input_code, input_name, input_reason):
+    # Fetching Variables
+
+    client_code = input_code
+    client_name = input_name
+    client_reason = input_reason
+
     cdie_field = WebDriverWait(chrome_driver, 300).\
         until(ec.presence_of_element_located((By.XPATH, "//*[@id='COD_INSTALACAO']")))
     time.sleep(4)

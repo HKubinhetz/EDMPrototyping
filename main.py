@@ -4,7 +4,7 @@
 # COMPLETE - Step 1) Create a mockup of the real-world workbook.
 # COMPLETE - Step 2) Bring BPM automation to the project (Login AND execution)
 # COMPLETE - Step 3a) Run the automation from Excel
-# Step 3b) Run the automation WITH parameters
+# COMPLETE - Step 3b) Run the automation WITH parameters
 # Step 4) Record the automation into workbook
 # Step 5) Tests and error handling
 # Step 6) Production
@@ -29,10 +29,17 @@ import bpm
 def main(cdie="no_cdie", name="no_name", reason="no_reason"):
     print("running")
     print(cdie)
-    # bpm.login_user()
-    # driver = bpm.load_cookies()
-    # bpm.open_bpm_ticket(driver)
-    # bpm.build_bpm_ticket(driver)
+
+    with open("C:\\Users\\ricku\\Desktop\\batata.txt", 'w') as f:
+        f.write(cdie)
+        f.write(name)
+        f.write(reason)
+
+    # TODO - Defining when code ran for the last time to skip login if cookies are still valid.
+    bpm.login_user()
+    driver = bpm.load_cookies()
+    bpm.open_bpm_ticket(driver)
+    bpm.build_bpm_ticket(driver, cdie, name, reason)
 
 
 if __name__ == "__main__":
