@@ -19,7 +19,6 @@ login_variables = sp.fetch_login(mypath)
 email = login_variables["login"]
 password = login_variables["senha"]
 
-# COMPLETE - Remove the need for filling in the webssite
 site_variables = sp.get_website_info(mypath, "BPM")
 website = site_variables["site1"]
 website2 = site_variables["site2"]
@@ -61,8 +60,18 @@ def open_bpm_ticket(chrome_driver):
     ticket_button = chrome_driver.find_element(By.LINK_TEXT, "Abertura de Chamados para Medição")
     ticket_button.click()
     form_frame = WebDriverWait(chrome_driver, 60).until(ec.presence_of_element_located((By.ID, "form-app")))
+    ticket_number = chrome_driver.find_element(By.NAME, "sCodProcesso").get_attribute('value')
     chrome_driver.switch_to.frame(form_frame)
+    return ticket_number
 
+
+def close_bpm_ticket(chrome_driver):
+    cancel_button = WebDriverWait(chrome_driver, 60).until(ec.presence_of_element_located((By.ID, "cancel")))
+    cancel_button.click()
+
+
+def kill_driver(chrome_driver):
+    chrome_driver.close()
 
 # -----------------------------------------------------------------------------------------------------------
 # ------------------------------------------------ EXECUTION ------------------------------------------------
