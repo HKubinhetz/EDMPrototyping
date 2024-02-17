@@ -70,7 +70,12 @@ def get_website_info(path=None, platform=None):
             json_contents = jsonfile.read()
 
         json_data = json.loads(json_contents)
-        return json_data  # json_data['site1'], json_data['site2']
+        return json_data  # json_data['bpm_link1'], json_data['bpm_link1']
+
+
+def save_cookies(path, cookies):
+    with open(path + "/config/cookies.json", 'w') as file:
+        json.dump(cookies, file)
 
 
 def validate_cookies(path):

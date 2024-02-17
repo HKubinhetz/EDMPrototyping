@@ -20,8 +20,8 @@ email = login_variables["login"]
 password = login_variables["senha"]
 
 site_variables = sp.get_website_info(mypath, "BPM")
-website = site_variables["site1"]
-website2 = site_variables["site2"]
+bpm_link1 = site_variables["bpm_link1"]
+bpm_link2 = site_variables["bpm_link2"]
 
 
 # ---------------------------------------------- AUX FUNCTIONS ----------------------------------------------
@@ -33,15 +33,16 @@ def button_advance(driver):
     login_advance_button.click()
 
 
-def load_cookies():
+def load_cookies(driver):
+
+    chrome_driver = driver
+
+    # Navigating to correct link
+    sp.fetch_website(chrome_driver, bpm_link2)
+
     # Load cookies to a variable from a file
     with open(mypath + "/config/cookies.json", 'r') as file:
         cookies = json.load(file)
-
-    # Navigating to correct link
-    chrome_driver = sp.setup_selenium()
-    chrome_driver.maximize_window()
-    sp.fetch_website(chrome_driver, website2)
 
     # Set stored cookies to maintain the session
     for cookie in cookies:
@@ -57,7 +58,8 @@ def load_cookies():
 
 
 def open_bpm_ticket(chrome_driver):
-    ticket_button = chrome_driver.find_element(By.LINK_TEXT, "Abertura de Chamados para Medição")
+    ticket_button = (WebDriverWait(chrome_driver, 60)
+                     .until(ec.presence_of_element_located((By.LINK_TEXT, "Abertura de Chamados para Medição"))))
     ticket_button.click()
     form_frame = WebDriverWait(chrome_driver, 60).until(ec.presence_of_element_located((By.ID, "form-app")))
     ticket_number = chrome_driver.find_element(By.NAME, "sCodProcesso").get_attribute('value')
@@ -84,12 +86,13 @@ def login_user():
 
     valid_cookies = sp.validate_cookies(mypath)
 
+    # Navigating to homepage
+    chrome_driver = sp.setup_selenium()
+    sp.fetch_website(chrome_driver, bpm_link1)
+    chrome_driver.maximize_window()
+
     if not valid_cookies:
-
-        # Navigating to correct link
-        chrome_driver = sp.setup_selenium()
-        sp.fetch_website(chrome_driver, website)
-
+        # If cookies ARE NOT valid, create them:
         # Login Button
         login_button = WebDriverWait(chrome_driver, 10).\
             until(ec.visibility_of_element_located((By.XPATH, "//*[@id='root']/div/div[1]/div[1]/div[3]/div/span")))
@@ -119,15 +122,20 @@ def login_user():
         # Check Logged In status
         logged_in = WebDriverWait(chrome_driver, 120).\
             until(ec.visibility_of_element_located((By.ID, "topo")))
-        print("Logado!")
+        print("BPM - Login Success!")
 
         # Get and store cookies after login
         cookies = chrome_driver.get_cookies()
+        sp.save_cookies(mypath, cookies)
+        # Redirecting to correct link
+        sp.fetch_website(chrome_driver, bpm_link2)
+        return chrome_driver
 
-        # TODO - Transfer pathing to 'support' script on a "save cookies" function
-        # Store cookies in a file
-        with open(mypath + "/config/cookies.json", 'w') as file:
-            json.dump(cookies, file)
+    else:
+        # If cookies ARE valid, load them.
+        load_cookies(chrome_driver)
+
+        return None
 
 
 # --------------------------------------------- PART 2 - TICKET ----------------------------------------------
@@ -229,5 +237,6 @@ def build_bpm_ticket(chrome_driver, input_code, input_name, input_reason):
 
     # ---------------------------------- FINAL DATA ACQUISITION ----------------------------------
 
-    final_button = chrome_driver.find_element(By.ID, "aprovar")
-    print(final_button.text)
+    # Optional Approve button
+    # final_button = chrome_driver.find_element(By.ID, "aprovar")
+

@@ -11,7 +11,7 @@
 #         # True/False for approve or cancel.
 # Step 7) Record the automation into workbook.
 # COMPLETE - Step 7a) open_bpm_ticket function has to read and return the ticket number into main
-# Step 7b) Use an UDF to return ticket number from main to VBA
+# Step 7b) Use an Xlwings' UDF functionality to return ticket number from main to VBA
 # Step 7c) Prompt user to write value into cell and show if cell already has values,
 #          appending new ones to existing ones.
 
@@ -22,10 +22,10 @@
 # Extra 4 - Implement for several selected clients
 # Extra 5 - Error Handling for unexpected conditions (cancelations/timeout >>> always delete time json for safety)
 # Extra 6 - Protect sensitive files, even though these don't get uploaded to repo.
-# Extra 7 - If login function runs, use same window instead of opening a new one. (Even use the same tab)
+# COMPLETE - Extra 7 - If login function runs, use same window instead of opening a new one. (Even use the same tab)
 # COMPLETE - Extra 8 - Remove the need for filling in the website on form
-# Extra 8 - Transfer pathing to 'support' script on a 'save cookies function'
-# COMPLETE - Extra 9 - Improve VBA code with User Warnings when wrong selections occur
+# COMPLETE - Extra 9 - Transfer pathing to 'support' script on a 'save cookies function'
+# COMPLETE - Extra 10 - Improve VBA code with User Warnings when wrong selections occur
 
 # ------------------------------------------------- IMPORTS -------------------------------------------------
 
@@ -40,8 +40,7 @@ import bpm
 
 def main(cdie="no_cdie", name="no_name", reason="no_reason"):
 
-    bpm.login_user()
-    driver = bpm.load_cookies()
+    driver = bpm.login_user()
     ticket = bpm.open_bpm_ticket(driver)
     bpm.build_bpm_ticket(driver, cdie, name, reason)
     # bpm.close_bpm_ticket(driver)
