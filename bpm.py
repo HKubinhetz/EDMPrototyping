@@ -134,8 +134,7 @@ def login_user():
     else:
         # If cookies ARE valid, load them.
         load_cookies(chrome_driver)
-
-        return None
+        return chrome_driver
 
 
 # --------------------------------------------- PART 2 - TICKET ----------------------------------------------
@@ -145,9 +144,9 @@ def login_user():
 def build_bpm_ticket(chrome_driver, input_code, input_name, input_reason):
     # Fetching Variables
 
-    client_code = input_code
-    client_name = input_name
-    client_reason = input_reason
+    client_code = int(input_code)
+    client_name = str(input_name)
+    client_reason = str(input_reason)
 
     cdie_field = WebDriverWait(chrome_driver, 300).\
         until(ec.presence_of_element_located((By.XPATH, "//*[@id='COD_INSTALACAO']")))

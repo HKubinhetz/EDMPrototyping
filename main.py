@@ -7,13 +7,12 @@
 # COMPLETE - Step 3b) Run the automation WITH parameters
 # COMPLETE - Step 4) Optimize VBA to find the correct columns and start from the selected cell
 # COMPLETE - Step 5) - VBA Prompt user about valid data.
-# Step 6) Create functionality on waiting for process to be approved to return into excel.
-#         # True/False for approve or cancel.
-# Step 7) Record the automation into workbook.
+# COMPLETE - Step 6) Return to Excel after completion, with prompt to accept or cancel sheet recording.
+# COMPLETE - Step 7) Record the automation into workbook.
 # COMPLETE - Step 7a) open_bpm_ticket function has to read and return the ticket number into main
-# Step 7b) Use an Xlwings' UDF functionality to return ticket number from main to VBA
-# Step 7c) Prompt user to write value into cell and show if cell already has values,
-#          appending new ones to existing ones.
+# COMPLETE - Step 7b) Use a Xlwings' UDF functionality to return ticket number from main to VBA
+# COMPLETE - Step 7c) Prompt user to write value into cell and show if cell already has values,
+#           appending new ones to existing ones.
 
 # ------------------------------------------------- EXTRAS --------------------------------------------------
 # COMPLETE - Extra 1 - Documentation on support.py
@@ -30,6 +29,7 @@
 # ------------------------------------------------- IMPORTS -------------------------------------------------
 
 import bpm
+import xlwings
 
 # -----------------------------------------------------------------------------------------------------------
 # ------------------------------------------------ EXECUTION ------------------------------------------------
@@ -38,7 +38,8 @@ import bpm
 
 # --------------------------------------------- PART 1 - LOGIN ----------------------------------------------
 
-def main(cdie="no_cdie", name="no_name", reason="no_reason"):
+@xlwings.func
+def run_bpm(cdie="no_cdie", name="no_name", reason="no_reason"):
 
     driver = bpm.login_user()
     ticket = bpm.open_bpm_ticket(driver)
@@ -49,5 +50,5 @@ def main(cdie="no_cdie", name="no_name", reason="no_reason"):
 
 
 if __name__ == "__main__":
-    main()
+    run_bpm()
 
