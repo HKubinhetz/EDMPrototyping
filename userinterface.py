@@ -38,5 +38,3 @@ def run_form():
 
             return data
 
-
-run_form()

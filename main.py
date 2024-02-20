@@ -40,7 +40,7 @@ import xlwings
 # --------------------------------------------- PART 1 - LOGIN ----------------------------------------------
 
 @xlwings.func
-def run_bpm(cdie="no_cdie", name="no_name", reason="no_reason"):
+def run_bpm(cdie=999999, name="no_name", reason="no_reason"):
 
     driver = bpm.login_user()
     ticket = bpm.open_bpm_ticket(driver)
