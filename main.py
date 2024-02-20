@@ -25,6 +25,7 @@
 # COMPLETE - Extra 8 - Remove the need for filling in the website on form
 # COMPLETE - Extra 9 - Transfer pathing to 'support' script on a 'save cookies function'
 # COMPLETE - Extra 10 - Improve VBA code with User Warnings when wrong selections occur
+# COMPLETE - Extra 11 - Form now accepts "Enter" key as a valid submit.
 
 # ------------------------------------------------- IMPORTS -------------------------------------------------
 
