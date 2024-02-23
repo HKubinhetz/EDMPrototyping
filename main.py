@@ -28,7 +28,7 @@
 # COMPLETE - Extra 2 - Create a UI for new config files
 # COMPLETE - Extra 3 - Check if cookies are recent and, if so, simply load them.
 # Extra 4 - Implement for several selected clients
-# Extra 5 - Error Handling for unexpected conditions (cancelations/timeout >>> always delete time json for safety)
+# Extra 5 - Error Handling for unexpected conditions (cancellations/timeout >>> always delete time json for safety)
 # Extra 6 - Protect sensitive files, even though these don't get uploaded to repo.
 # COMPLETE - Extra 7 - If login function runs, use same window instead of opening a new one. (Even use the same tab)
 # COMPLETE - Extra 8 - Remove the need for filling in the website on form
