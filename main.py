@@ -17,10 +17,10 @@
 
 # ----------------------------------------- STEPS (PHASE 2 - BPM 2) -------------------------------------------
 # Automating the opening of visits ticket.
-# Step 1) Create a new template and define needed variables.
+# COMPLETE - Step 1) Create a new template and define needed variables.
 # Step 2) Obtain Address and City for each possibility
 # Step 3) Create a relation between City and Region (use a DB or something fun here!)
-# Step 3) Refactor the existing code, enabling it to receive different kinds of requests/models.
+# COMPLETE - Step 3) Refactor the existing code, enabling it to receive different kinds of requests/models.
 # Step 4) Move it to production.
 
 # ------------------------------------------------- EXTRAS --------------------------------------------------

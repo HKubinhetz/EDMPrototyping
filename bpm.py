@@ -34,7 +34,6 @@ def button_advance(driver):
 
 
 def load_cookies(driver):
-
     chrome_driver = driver
 
     # Navigating to correct link
@@ -75,6 +74,7 @@ def close_bpm_ticket(chrome_driver):
 def kill_driver(chrome_driver):
     chrome_driver.close()
 
+
 # -----------------------------------------------------------------------------------------------------------
 # ------------------------------------------------ EXECUTION ------------------------------------------------
 # -----------------------------------------------------------------------------------------------------------
@@ -83,7 +83,6 @@ def kill_driver(chrome_driver):
 # --------------------------------------------- PART 1 - LOGIN ----------------------------------------------
 
 def login_user():
-
     valid_cookies = sp.validate_cookies(mypath)
 
     # Navigating to homepage
@@ -94,12 +93,12 @@ def login_user():
     if not valid_cookies:
         # If cookies ARE NOT valid, create them:
         # Login Button
-        login_button = WebDriverWait(chrome_driver, 10).\
+        login_button = WebDriverWait(chrome_driver, 10). \
             until(ec.visibility_of_element_located((By.XPATH, "//*[@id='root']/div/div[1]/div[1]/div[3]/div/span")))
         login_button.click()
 
         # Login Field
-        login_field = WebDriverWait(chrome_driver, 10).\
+        login_field = WebDriverWait(chrome_driver, 10). \
             until(ec.visibility_of_element_located((By.ID, "i0116")))
         login_field.send_keys(email)
 
@@ -107,7 +106,7 @@ def login_user():
         button_advance(chrome_driver)
 
         # Password Field
-        password_field = WebDriverWait(chrome_driver, 10).\
+        password_field = WebDriverWait(chrome_driver, 10). \
             until(ec.visibility_of_element_located((By.ID, "i0118")))
 
         password_field.send_keys(password)
@@ -120,7 +119,7 @@ def login_user():
         button_advance(chrome_driver)
 
         # Check Logged In status
-        logged_in = WebDriverWait(chrome_driver, 120).\
+        logged_in = WebDriverWait(chrome_driver, 120). \
             until(ec.visibility_of_element_located((By.ID, "topo")))
         print("BPM - Login Success!")
 
@@ -141,14 +140,14 @@ def login_user():
 
 # Also waits for page to finish loading
 
-def build_bpm_ticket(chrome_driver, input_code, input_name, input_reason):
+def build_bpm_ticket(chrome_driver, input_code, input_name, input_reason, model=None):
     # Fetching Variables
 
     client_code = int(input_code)
     client_name = str(input_name)
     client_reason = str(input_reason)
 
-    cdie_field = WebDriverWait(chrome_driver, 300).\
+    cdie_field = WebDriverWait(chrome_driver, 300). \
         until(ec.presence_of_element_located((By.XPATH, "//*[@id='COD_INSTALACAO']")))
     time.sleep(4)
     cdie_field.click()
@@ -183,8 +182,16 @@ def build_bpm_ticket(chrome_driver, input_code, input_name, input_reason):
     region_caret.click()
     region_search = WebDriverWait(chrome_driver, 10).until(ec.element_to_be_clickable((By.ID, "REGIAO__search")))
     region_search.click()
-    region_search.send_keys("RMSP")
-    region_search.send_keys(Keys.ENTER)
+
+    # Building different message according to used model:
+
+    if model == "battery":
+        region_search.send_keys("Interior")
+        region_search.send_keys(Keys.ENTER)
+
+    else:
+        region_search.send_keys("RMSP")
+        region_search.send_keys(Keys.ENTER)
 
     # ---------------------------------- Fifth Field - City ----------------------------------
 
@@ -193,9 +200,16 @@ def build_bpm_ticket(chrome_driver, input_code, input_name, input_reason):
     ActionChains(chrome_driver).move_to_element(city_caret)
     city_search = WebDriverWait(chrome_driver, 10).until(ec.element_to_be_clickable((By.ID, "MUNICIPIO__search")))
     city_search.click()
-    # time.sleep(2)
-    city_search.send_keys("SAO PAULO")
-    city_search.send_keys(Keys.ENTER)
+
+    # Building different message according to used model:
+
+    if model == "battery":
+        city_search.send_keys("Campinas")
+        city_search.send_keys(Keys.ENTER)
+
+    else:
+        city_search.send_keys("SAO PAULO")
+        city_search.send_keys(Keys.ENTER)
 
     # ---------------------------------- Sixth Field - Object ----------------------------------
 
@@ -230,12 +244,20 @@ def build_bpm_ticket(chrome_driver, input_code, input_name, input_reason):
     # ---------------------------------- Text Field - Full description ----------------------------------
     description_field = WebDriverWait(chrome_driver, 10).until(ec.presence_of_element_located((By.ID, "DESCRICAO")))
     description_field.click()
-    description_field.send_keys(f"Prezados! Poderiam por gentileza estimar o cliente {client_code} - {client_name}? \n"
-                                f"Motivo: {client_reason}. \n \n"
-                                "Obrigado e um ótimo dia!")
+
+    if model is "battery":
+        description_field. \
+            send_keys(f"Prezados! Poderiam por gentileza verificar o cliente {client_code} - {client_name}? \n"
+                      f"Foi solicitada uma visita por conta do seguinte motivo: {client_reason}. \n \n"
+                      "Obrigado e um ótimo dia!")
+
+    else:
+        description_field. \
+            send_keys(f"Prezados! Poderiam por gentileza estimar o cliente {client_code} - {client_name}? \n"
+                      f"Motivo: {client_reason}. \n \n"
+                      "Obrigado e um ótimo dia!")
 
     # ---------------------------------- FINAL DATA ACQUISITION ----------------------------------
 
     # Optional Approve button
     # final_button = chrome_driver.find_element(By.ID, "aprovar")
-
