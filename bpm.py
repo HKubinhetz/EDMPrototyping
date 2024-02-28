@@ -3,6 +3,7 @@ import os
 import time
 import json
 import support as sp
+import addressbuilder as ab
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
@@ -146,6 +147,7 @@ def build_bpm_ticket(chrome_driver, input_code, input_name, input_reason, model=
     client_code = int(input_code)
     client_name = str(input_name)
     client_reason = str(input_reason)
+    client_info, client_address = ab.get_clientdata(client_code, mypath)
 
     cdie_field = WebDriverWait(chrome_driver, 300). \
         until(ec.presence_of_element_located((By.XPATH, "//*[@id='COD_INSTALACAO']")))
@@ -156,7 +158,7 @@ def build_bpm_ticket(chrome_driver, input_code, input_name, input_reason, model=
 
     # ---------------------------------- JavaScript Alert ----------------------------------
     # Wait for the alert to be displayed and store it in a variable
-    alert = WebDriverWait(chrome_driver, 10).until(ec.alert_is_present())
+    alert = WebDriverWait(chrome_driver, 300).until(ec.alert_is_present())
     time.sleep(1)
     alert.accept()
 
@@ -183,14 +185,12 @@ def build_bpm_ticket(chrome_driver, input_code, input_name, input_reason, model=
     region_search = WebDriverWait(chrome_driver, 10).until(ec.element_to_be_clickable((By.ID, "REGIAO__search")))
     region_search.click()
 
-    # Building different message according to used model:
-
-    if model == "battery":
-        region_search.send_keys("Interior")
+    # Handling client not found error:
+    if client_info is None:
+        region_search.send_keys('RMSP')
         region_search.send_keys(Keys.ENTER)
-
     else:
-        region_search.send_keys("RMSP")
+        region_search.send_keys(client_info['region'])
         region_search.send_keys(Keys.ENTER)
 
     # ---------------------------------- Fifth Field - City ----------------------------------
@@ -201,15 +201,14 @@ def build_bpm_ticket(chrome_driver, input_code, input_name, input_reason, model=
     city_search = WebDriverWait(chrome_driver, 10).until(ec.element_to_be_clickable((By.ID, "MUNICIPIO__search")))
     city_search.click()
 
-    # Building different message according to used model:
-
-    if model == "battery":
-        city_search.send_keys("Campinas")
+    # Handling client not found error:
+    if client_info is None:
+        city_search.send_keys('SAO PAULO')
         city_search.send_keys(Keys.ENTER)
-
     else:
-        city_search.send_keys("SAO PAULO")
-        city_search.send_keys(Keys.ENTER)
+        city_search.send_keys(client_info['city'])
+        city_list = WebDriverWait(chrome_driver, 10).until(ec.element_to_be_clickable((By.ID, "MUNICIPIO_0")))
+        city_list.send_keys(Keys.ENTER)
 
     # ---------------------------------- Sixth Field - Object ----------------------------------
 
@@ -218,8 +217,14 @@ def build_bpm_ticket(chrome_driver, input_code, input_name, input_reason, model=
     ActionChains(chrome_driver).move_to_element(object_caret)
     object_search = WebDriverWait(chrome_driver, 10).until(ec.element_to_be_clickable((By.ID, "OBJETO__search")))
     object_search.click()
-    object_search.send_keys("Faturamento")
-    object_search.send_keys(Keys.ENTER)
+
+    if model == "visit":
+        object_search.send_keys("Eletroconversor")  # Searching for "Eletroconversor de Volume"
+        object_list = WebDriverWait(chrome_driver, 10).until(ec.element_to_be_clickable((By.ID, "OBJETO_0")))
+        object_list.send_keys(Keys.ENTER)
+    else:
+        object_search.send_keys("Faturamento")
+        object_search.send_keys(Keys.ENTER)
 
     # ---------------------------------- Seventh Field - Problem ----------------------------------
     problem_caret = WebDriverWait(chrome_driver, 10).until(ec.presence_of_element_located((By.ID,
@@ -228,8 +233,14 @@ def build_bpm_ticket(chrome_driver, input_code, input_name, input_reason, model=
     problem_search = WebDriverWait(chrome_driver, 10).until(ec.element_to_be_clickable((By.ID,
                                                                                         "CARACTERISTICA__search")))
     problem_search.click()
-    problem_search.send_keys("Estimar Dados")
-    problem_search.send_keys(Keys.ENTER)
+
+    if model == "visit":
+        problem_search.send_keys("Apagado")
+        problem_search.send_keys(Keys.ENTER)
+
+    else:
+        problem_search.send_keys("Estimar Dados")
+        problem_search.send_keys(Keys.ENTER)
 
     # ---------------------------------- Eighth Field - Billing Problem? ----------------------------------
     billing_caret = WebDriverWait(chrome_driver, 10).until(ec.presence_of_element_located((By.ID,
@@ -245,10 +256,16 @@ def build_bpm_ticket(chrome_driver, input_code, input_name, input_reason, model=
     description_field = WebDriverWait(chrome_driver, 10).until(ec.presence_of_element_located((By.ID, "DESCRICAO")))
     description_field.click()
 
-    if model is "battery":
+    if client_info is None:
+        client_address = "Observação: Dados do cliente não encontrados na base SAP."
+
+    print(model)
+
+    if model == "visit":
         description_field. \
             send_keys(f"Prezados! Poderiam por gentileza verificar o cliente {client_code} - {client_name}? \n"
                       f"Foi solicitada uma visita por conta do seguinte motivo: {client_reason}. \n \n"
+                      f"{client_address} \n \n"
                       "Obrigado e um ótimo dia!")
 
     else:
