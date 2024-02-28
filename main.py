@@ -19,9 +19,10 @@
 # Automating the opening of visits ticket.
 # COMPLETE - Step 1) Create a new template and define needed variables.
 # COMPLETE - Step 2) Obtain Address and City for each possibility
-# Step 3) Create a relation between City and Region (use a DB or something fun here!)
+# COMPLETE - Step 3) Create a relation between City and Region
 # COMPLETE - Step 3) Refactor the existing code, enabling it to receive different kinds of requests/models.
-# Step 4) Move it to production.
+# Step 4) Bring the new functionality into existing code
+# Step 5) Move it to production.
 
 # ------------------------------------------------- EXTRAS --------------------------------------------------
 # COMPLETE - Extra 1 - Documentation on support.py
