@@ -119,3 +119,16 @@ def validate_cookies(path):
         return False
 
 
+def format_dates(start_date, end_date, billing_date):
+    # Formats a date in a "datetimeformat" to dd/mm/yyyy, returning it within a dictionary
+    start_date = start_date.strftime("%d/%m/%Y")
+    end_date = end_date.strftime("%d/%m/%Y")
+    billing_date = billing_date.strftime("%d/%m/%Y")
+
+    formatted_dates = {
+        "start_date": start_date,
+        "end_date": end_date,
+        "billing_date": billing_date,
+    }
+
+    return formatted_dates

@@ -141,13 +141,15 @@ def login_user():
 
 # Also waits for page to finish loading
 
-def build_bpm_ticket(chrome_driver, input_code, input_name, input_reason, model=None):
-    # Fetching Variables
+def build_bpm_ticket(chrome_driver, input_code, input_name, input_reason,
+                     model=None, start_date=None, end_date=None, billing_date=None):
 
+    # Fetching Variables
     client_code = int(input_code)
     client_name = str(input_name)
     client_reason = str(input_reason)
     client_info, client_address = ab.get_clientdata(client_code, mypath)
+    client_dates = sp.format_dates(start_date, end_date, billing_date)
 
     cdie_field = WebDriverWait(chrome_driver, 300). \
         until(ec.presence_of_element_located((By.XPATH, "//*[@id='COD_INSTALACAO']")))
@@ -271,7 +273,9 @@ def build_bpm_ticket(chrome_driver, input_code, input_name, input_reason, model=
     else:
         description_field. \
             send_keys(f"Prezados! Poderiam por gentileza estimar o cliente {client_code} - {client_name}? \n"
-                      f"Motivo: {client_reason}. \n \n"
+                      f"Motivo: {client_reason}. \n"
+                      f"Período de Leitura: {client_dates['start_date']} a {client_dates['end_date']} \n"
+                      f"Data de Faturamento: {client_dates['billing_date']} \n \n "
                       "Obrigado e um ótimo dia!")
 
     # ---------------------------------- FINAL DATA ACQUISITION ----------------------------------

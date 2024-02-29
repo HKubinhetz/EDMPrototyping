@@ -23,7 +23,7 @@
 # COMPLETE - Step 3) Refactor the existing code, enabling it to receive different kinds of requests/models.
 # COMPLETE - Step 4) Bring the new functionality into existing code
 # COMPLETE - Step 5) Move it to production.
-# Step 6) Provide billing dates to facilitate the process' execution.
+# COMPLETE - Step 6) Provide billing dates to facilitate the process' execution.
 
 # ------------------------------------------------- EXTRAS --------------------------------------------------
 # COMPLETE - Extra 1 - Documentation on support.py
@@ -43,8 +43,7 @@
 
 import bpm
 import xlwings
-
-
+from datetime import datetime
 # -----------------------------------------------------------------------------------------------------------
 # ------------------------------------------------ EXECUTION ------------------------------------------------
 # -----------------------------------------------------------------------------------------------------------
@@ -53,10 +52,11 @@ import xlwings
 # --------------------------------------------- PART 1 - LOGIN ----------------------------------------------
 
 @xlwings.func
-def run_bpm(cdie=000000, name="no_name", reason="no_reason", model="no_model"):
+def run_bpm(cdie=000000, name="no_name", reason="no_reason", model="no_model",
+            start_date=None, end_date=None, billing_date=None):
     driver = bpm.login_user()
     ticket = bpm.open_bpm_ticket(driver)
-    bpm.build_bpm_ticket(driver, cdie, name, reason, model)
+    bpm.build_bpm_ticket(driver, cdie, name, reason, model, start_date, end_date, billing_date)
     # bpm.close_bpm_ticket(driver)
     # bpm.kill_driver(driver)
     return ticket
@@ -65,3 +65,4 @@ def run_bpm(cdie=000000, name="no_name", reason="no_reason", model="no_model"):
 # Testing the code
 if __name__ == "__main__":
     run_bpm(cdie=691969, model="visit")
+
