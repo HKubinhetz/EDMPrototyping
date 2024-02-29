@@ -275,7 +275,7 @@ def build_bpm_ticket(chrome_driver, input_code, input_name, input_reason,
             send_keys(f"Prezados! Poderiam por gentileza estimar o cliente {client_code} - {client_name}? \n"
                       f"Motivo: {client_reason}. \n"
                       f"Período de Leitura: {client_dates['start_date']} a {client_dates['end_date']} \n"
-                      f"Data de Faturamento: {client_dates['billing_date']} \n \n "
+                      f"Data de Faturamento: {client_dates['billing_date']} \n \n"
                       "Obrigado e um ótimo dia!")
 
     # ---------------------------------- FINAL DATA ACQUISITION ----------------------------------
