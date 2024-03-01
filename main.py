@@ -25,6 +25,16 @@
 # COMPLETE - Step 5) Move it to production.
 # COMPLETE - Step 6) Provide billing dates to facilitate the process' execution.
 
+# ----------------------------------------- STEPS (PHASE 3 - TEAMS) -------------------------------------------
+# Automating Teams Messaging
+# Step 1) Automate Teams Login
+# Step 2) Navigate to your own chat and say hi
+# Step 3) Reuse chromedriver and say hi again
+# Step 4) Format your message
+# Step 5) Do it hidden
+
+
+
 # ------------------------------------------------- EXTRAS --------------------------------------------------
 # COMPLETE - Extra 1 - Documentation on support.py
 # COMPLETE - Extra 2 - Create a UI for new config files
