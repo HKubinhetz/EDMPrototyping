@@ -25,13 +25,11 @@
 # COMPLETE - Step 5) Move it to production.
 # COMPLETE - Step 6) Provide billing dates to facilitate the process' execution.
 
-# ----------------------------------------- STEPS (PHASE 3 - TEAMS) -------------------------------------------
-# Automating Teams Messaging
-# Step 1) Automate Teams Login
-# Step 2) Navigate to your own chat and say hi
-# Step 3) Reuse chromedriver and say hi again
-# Step 4) Format your message
-# Step 5) Do it hidden
+# ----------------------------------------- STEPS (PHASE 3 - ITSM) -------------------------------------------
+# Automating ITSM Tickets with python
+# Step 1) Automate ITSM Login
+# Step 2) Manipulate history and cookies
+
 
 
 
@@ -48,6 +46,7 @@
 # COMPLETE - Extra 10 - Improve VBA code with User Warnings when wrong selections occur
 # COMPLETE - Extra 11 - Form now accepts "Enter" key as a valid submit.
 # COMPLETE - Extra 12 - Create error handling for clients that are not found in the spreadsheet.
+# Extra 7 - Build an option to change login information!
 
 # ------------------------------------------------- IMPORTS -------------------------------------------------
 
