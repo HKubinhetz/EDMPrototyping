@@ -120,15 +120,19 @@ def validate_cookies(path):
 
 
 def format_dates(start_date, end_date, billing_date):
-    # Formats a date in a "datetimeformat" to dd/mm/yyyy, returning it within a dictionary
-    start_date = start_date.strftime("%d/%m/%Y")
-    end_date = end_date.strftime("%d/%m/%Y")
-    billing_date = billing_date.strftime("%d/%m/%Y")
 
-    formatted_dates = {
-        "start_date": start_date,
-        "end_date": end_date,
-        "billing_date": billing_date,
-    }
+    try:
+        # Formats a date in a "datetimeformat" to dd/mm/yyyy, returning it within a dictionary
+        start_date = start_date.strftime("%d/%m/%Y")
+        end_date = end_date.strftime("%d/%m/%Y")
+        billing_date = billing_date.strftime("%d/%m/%Y")
 
-    return formatted_dates
+        formatted_dates = {
+            "start_date": start_date,
+            "end_date": end_date,
+            "billing_date": billing_date,
+        }
+
+        return formatted_dates
+    except AttributeError:
+        return None
