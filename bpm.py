@@ -2,11 +2,14 @@
 import os
 import time
 import json
+
+
 import support as sp
 import addressbuilder as ab
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.common import ElementClickInterceptedException, TimeoutException
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.action_chains import ActionChains
 
@@ -58,9 +61,17 @@ def load_cookies(driver):
 
 
 def open_bpm_ticket(chrome_driver):
+
     ticket_button = (WebDriverWait(chrome_driver, 60)
-                     .until(ec.presence_of_element_located((By.LINK_TEXT, "Abertura de Chamados para Medição"))))
-    ticket_button.click()
+                     .until(ec.element_to_be_clickable((By.LINK_TEXT, "Abertura de Chamados para Medição"))))
+
+    # Error handling for loading issues
+    try:
+        ticket_button.click()
+    except ElementClickInterceptedException:
+        time.sleep(5)
+        ActionChains(chrome_driver).move_to_element(ticket_button).click(ticket_button).perform()
+
     form_frame = WebDriverWait(chrome_driver, 60).until(ec.presence_of_element_located((By.ID, "form-app")))
     ticket_number = chrome_driver.find_element(By.NAME, "sCodProcesso").get_attribute('value')
     chrome_driver.switch_to.frame(form_frame)
@@ -160,9 +171,13 @@ def build_bpm_ticket(chrome_driver, input_code, input_name, input_reason,
 
     # ---------------------------------- JavaScript Alert ----------------------------------
     # Wait for the alert to be displayed and store it in a variable
-    alert = WebDriverWait(chrome_driver, 300).until(ec.alert_is_present())
-    time.sleep(1)
-    alert.accept()
+
+    try:
+        alert = WebDriverWait(chrome_driver, 10).until(ec.alert_is_present())
+        time.sleep(1)
+        alert.accept()
+    except TimeoutException:
+        print("No JavaScript Alert Located. Moving on...")
 
     # ---------------------------------- Second Field - Soliciting Sector ----------------------------------
     area_caret = WebDriverWait(chrome_driver, 10).until(ec.presence_of_element_located((By.ID,

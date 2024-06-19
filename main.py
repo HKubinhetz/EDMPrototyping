@@ -73,5 +73,5 @@ def run_bpm(cdie=000000, name="no_name", reason="no_reason", model="no_model",
 
 # Testing the code
 if __name__ == "__main__":
-    run_bpm(cdie=691969, model="visit")
+    run_bpm(cdie=413798, model="visit")
 
